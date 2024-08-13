@@ -77,10 +77,10 @@ namespace ServerLibrary.Repositories.Implementations
 
             //Save the Refresh token to the database
             var findUser = await appDbContext.RefreshTokenInfos.FirstOrDefaultAsync(_ => _.UserId == applicationUser.Id);
-            if (findUser is null)
+            if (findUser is not null)
             {
                 //checks if the user is logged in else refresh the token
-                //findUser!.Token = refreshToken;
+                findUser!.Token = refreshToken;
                 await appDbContext.SaveChangesAsync();
             }
             else
@@ -130,7 +130,8 @@ namespace ServerLibrary.Repositories.Implementations
 
         public async Task<LoginResponse> RefreshTokenAsync(RefreshToken token)
         {
-            if (token == null) return new LoginResponse(false, "Token is Empty");
+            if (token is null) return new LoginResponse(false, "Token is Empty");
+
             var findToken = await appDbContext.RefreshTokenInfos.FirstOrDefaultAsync(_ => _.Token!.Equals(token.Token));
             if (findToken is null) return new LoginResponse(false, "Refresh token is required");
 
@@ -147,7 +148,7 @@ namespace ServerLibrary.Repositories.Implementations
             var updateRefreshToken = await appDbContext.RefreshTokenInfos.FirstOrDefaultAsync(_ => _.UserId == user.Id);
             if (updateRefreshToken is null) return new LoginResponse(false, "Please sign in before a Refresh Token can be assigned to user");
 
-            //Save the new updatedRefreshToken to DB
+            //stateless jwt
             updateRefreshToken.Token = refreshToken;
             await appDbContext.SaveChangesAsync();
             return new LoginResponse(true, "Token successfully granted", jwtToken, refreshToken);
