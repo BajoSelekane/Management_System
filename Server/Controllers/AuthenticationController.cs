@@ -1,7 +1,5 @@
 ﻿using BaseLibrary.DTOs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using ServerLibrary.Repositories.Contracts;
 
 namespace Server.Controllers

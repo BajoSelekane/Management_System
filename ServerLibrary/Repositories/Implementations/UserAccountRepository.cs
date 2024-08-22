@@ -8,7 +8,6 @@ using ServerLibrary.Data;
 using ServerLibrary.Helper;
 using ServerLibrary.Repositories.Contracts;
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -34,8 +33,8 @@ namespace ServerLibrary.Repositories.Implementations
             });
 
             //Check, create and assign role
-            var checkAdminRole = await appDbContext.SystemRoles.FirstOrDefaultAsync(_=> _.Name! .Equals(Constants.Admin));
-            if(checkAdminRole is null)
+            var checkAdminRole = await appDbContext.SystemRoles.FirstOrDefaultAsync(_ => _.Name!.Equals(Constants.Admin));
+            if (checkAdminRole is null)
             {
                 var createAdminRole = await AddToDatabase(new SystemRoles() { Name = Constants.Admin });
                 await AddToDatabase(new UserRoles() { RoleId = createAdminRole.Id, UserId = applicationUser.Id });
@@ -43,14 +42,14 @@ namespace ServerLibrary.Repositories.Implementations
             }
             var checkUserRole = await appDbContext.SystemRoles.FirstOrDefaultAsync(_ => _.Name!.Equals(Constants.User));
             SystemRoles response = new();
-            if(checkUserRole is null)
+            if (checkUserRole is null)
             {
-                response = await AddToDatabase(new SystemRoles() { Name= Constants.User });
+                response = await AddToDatabase(new SystemRoles() { Name = Constants.User });
                 await AddToDatabase(new UserRoles() { RoleId = response.Id, UserId = applicationUser.Id });
             }
             else
             {
-                await AddToDatabase(new UserRoles() { RoleId= checkUserRole.Id, UserId=applicationUser.Id });
+                await AddToDatabase(new UserRoles() { RoleId = checkUserRole.Id, UserId = applicationUser.Id });
             }
             return new GeneralResponse(true, "UserAccount Successfully created");
 
@@ -58,12 +57,12 @@ namespace ServerLibrary.Repositories.Implementations
 
         public async Task<LoginResponse> SignInAsync(Login user)
         {
-           if(user is null) return new LoginResponse(false, "Model is empty");
-           var applicationUser = await FindUserByEmail(user.Email!);
+            if (user is null) return new LoginResponse(false, "Model is empty");
+            var applicationUser = await FindUserByEmail(user.Email!);
             if (applicationUser is null) return new LoginResponse(false, "User not found");
 
             //Verify the user password
-            if (!BCrypt.Net.BCrypt.Verify(user.Password, applicationUser.Password)) 
+            if (!BCrypt.Net.BCrypt.Verify(user.Password, applicationUser.Password))
                 return new LoginResponse(false, "Email/Password not valid");
 
             var getUserRole = await FindUserRole(applicationUser.Id);
@@ -87,11 +86,11 @@ namespace ServerLibrary.Repositories.Implementations
             {
                 await AddToDatabase(new RefreshTokenInfo() { Token = refreshToken, UserId = applicationUser.Id });
             }
-            return new LoginResponse(true, "Login successfully",jwtToken,refreshToken);
+            return new LoginResponse(true, "Login successfully", jwtToken, refreshToken);
 
-        }   
+        }
 
-        private string GenerateToken(ApplicationUser user,string role)
+        private string GenerateToken(ApplicationUser user, string role)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Value.Key!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -125,7 +124,7 @@ namespace ServerLibrary.Repositories.Implementations
         {
             var result = appDbContext.Add(model!);
             await appDbContext.SaveChangesAsync();
-            return(T)result.Entity;
+            return (T)result.Entity;
         }
 
         public async Task<LoginResponse> RefreshTokenAsync(RefreshToken token)
@@ -141,7 +140,7 @@ namespace ServerLibrary.Repositories.Implementations
 
             var userRole = await FindUserRole(user.Id);
             var roleName = await FindRoleName(userRole.RoleId);
-            string jwtToken = GenerateToken(user,roleName.Name!);
+            string jwtToken = GenerateToken(user, roleName.Name!);
             string refreshToken = GenerateRefreshToken();
 
             //Sign-in before a Refresh token can be granted to the user

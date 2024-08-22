@@ -18,11 +18,13 @@
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
 	</ItemGroup>
 	
+	
   <ItemGroup>
     <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj" />
     <ProjectReference Include="..\ClientLibrary\ClientLibrary.csproj" />
 	 
   </ItemGroup>
+	
 
   <ItemGroup>
     <UpToDateCheckInput Remove="CascadingAuthenticationState.razor" />

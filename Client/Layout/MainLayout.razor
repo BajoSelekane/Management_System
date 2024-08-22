@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
+﻿@using BaseLibrary.DTOs
+@using Microsoft.AspNetCore.Components.Authorization
 @using ClientLibrary.Helpers
 @inherits LayoutComponentBase
 <div class="page">
@@ -10,11 +11,11 @@
         <div class="top-row px-4">
             <AuthorizeView>
                 <Authorized>
-                    <a class="btn btn-none text-danger" onclick="LogoutClicked">Logout</a>
+                    <a class="btn btn-none text-danger" onclick="LogoutClicked">Logout</a>                    
                 </Authorized>
                 <NotAuthorized>
                     <a class="btn btn-none" href="identity/account/login">Login</a>
-                    <a class="btn btn-none" href="identity/account/register">Register</a>
+                    <a class="btn btn-none" href="identity/account/register">Register</a>                   
                 </NotAuthorized>
             </AuthorizeView>
         </div>

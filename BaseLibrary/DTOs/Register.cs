@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BaseLibrary.DTOs
 {
-    public class Register:BaseAccount
+    public class Register : BaseAccount
     {
         [Required]
         [MinLength(5)]
@@ -15,7 +10,7 @@ namespace BaseLibrary.DTOs
         public string? FullName { get; set; }
         [DataType(DataType.Password)]
         [Compare(nameof(Password))]
-        [Required] public string? ConfirmPassword {  get; set; }
+        [Required] public string? ConfirmPassword { get; set; }
 
     }
 }

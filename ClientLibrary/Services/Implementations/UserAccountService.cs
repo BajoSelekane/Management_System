@@ -12,8 +12,8 @@ namespace ClientLibrary.Services.Implementations
         public const string AuthUrl = "api/authentication";
         public async Task<GeneralResponse> CreateAsync(Register user)
         {
-           var httpClient = getHttpClient.GetPublicHttpClient();
-           var result = await httpClient.PostAsJsonAsync($"{AuthUrl}/register", user);
+            var httpClient = getHttpClient.GetPublicHttpClient();
+            var result = await httpClient.PostAsJsonAsync($"{AuthUrl}/register", user);
             if (!result.IsSuccessStatusCode) return new GeneralResponse(false, "An Error occured");
             return await result.Content.ReadFromJsonAsync<GeneralResponse>()!;
         }
@@ -30,6 +30,6 @@ namespace ClientLibrary.Services.Implementations
             throw new NotImplementedException();
         }
 
-       
+
     }
 }
