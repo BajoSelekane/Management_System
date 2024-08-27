@@ -14,6 +14,6 @@ namespace BaseLibrary.Entities
         //Relationship : One to Many
         [JsonIgnore]
 
-        public List<Employee>? employees { get; set; }
+        public List<Employee>? Employees { get; set; }
     }
 }
