@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using BaseLibrary.DTOs;
 using BaseLibrary.Responses;
 
-namespace ServerLibrary.Repositories.Contracts
+namespace Server.Repositories.Contracts
 {
     public interface IUserAccount
     {
         Task<GeneralResponse> CreateAsync(Register user);
-        Task<RefreshTokenResponse>RefreshTokenAsync(RefreshToken token);
+        Task<LoginResponse> RefreshTokenAsync(RefreshToken token);
         Task<LoginResponse> SignInAsync(Login user);
     }
 }

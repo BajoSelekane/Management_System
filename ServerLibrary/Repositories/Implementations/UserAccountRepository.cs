@@ -7,6 +7,7 @@ using ServerLibrary.Data;
 using ServerLibrary.Helper;
 using ServerLibrary.Repositories.Contracts;
 
+
 namespace ServerLibrary.Repositories.Implementations
 {
     public class UserAccountRepository(IOptions<JwtSection> config, AppDbContext appDbContext) : IUserAccount
@@ -24,7 +25,9 @@ namespace ServerLibrary.Repositories.Implementations
             {
                 Fullname = user.FullName,
                 Email = user.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(user.Password)
+                Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
+               // ConfirmPassword =user.ConfirmPassword
+                
             });
 
             //Check, create and assign role
@@ -56,13 +59,18 @@ namespace ServerLibrary.Repositories.Implementations
         }
 
         private async Task<ApplicationUser> FindUserByEmail(string email) =>
-            await appDbContext.ApplicationUsers.FirstOrDefaultAsync(_=>_.Email!.ToLower()!.Equals(email!.ToLower()));
+            await appDbContext.ApplicationUsers.FirstOrDefaultAsync(_ => _.Email!.ToLower()!.Equals(email!.ToLower()));
 
         private async Task<T> AddToDatabase<T>(T model)
         {
             var result = appDbContext.Add(model!);
             await appDbContext.SaveChangesAsync();
             return(T)result.Entity;
+        }
+
+        public Task<RefreshTokenResponse> RefreshTokenAsync(RefreshToken token)
+        {
+            throw new NotImplementedException();
         }
     }
 }
