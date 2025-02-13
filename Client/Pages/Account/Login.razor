@@ -1,0 +1,67 @@
+@page "/login"
+@using BaseLibrary.Responses
+@using Blazored.LocalStorage;
+@using BaseLibrary.DTOs;
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+
+<div class="login-container">
+    <h3>Login</h3>
+
+    <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label>Email:</label>
+            <InputText @bind-Value="loginModel.Email" class="form-control" />
+            <ValidationMessage For="@(() => loginModel.Email)" />
+        </div>
+
+        <div class="form-group">
+            <label>Password:</label>
+            <InputText type="password" @bind-Value="loginModel.Password" class="form-control" />
+            <ValidationMessage For="@(() => loginModel.Password)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+        
+        <div class="mt-3">
+            <a href="/forgot-password">Forgot Password?</a>
+            <span class="mx-2">|</span>
+            <a href="/register">Register</a>
+        </div>
+    </EditForm>
+
+    @if (!string.IsNullOrEmpty(error))
+    {
+        <div class="alert alert-danger mt-3">@error</div>
+    }
+</div>
+
+@code {
+    private BaseLibrary.DTOs.Login loginModel = new();
+    private string error;
+
+    private async Task HandleLogin()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/account/login", loginModel);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                await LocalStorage.SetItemAsync("token", result.Token);
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                error = "Invalid login attempt";
+            }
+        }
+        catch (Exception ex)
+        {
+            error = "An error occurred while logging in";
+        }
+    }
+} 

@@ -1,0 +1,173 @@
+﻿@page
+@model Web_app.Pages.Account.LoginModel
+@{
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Whooz-Woo</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Tailwind custom styles for the animated background -->
+        <style>
+            /* Create animated gradient background */
+          
+
+            .gradient-bg {
+                background: linear-gradient(45deg, #ff5c8f, #00bcd4, #ff9800, #8e44ad);
+                background-size: 400% 400%;
+                animation: gradientAnimation 15s ease infinite;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            .showcase {
+                position: relative;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 0 20px;
+                z-index: 1; /* Ensure content stays above video */
+            }
+
+            .video-container {
+                position: fixed; /* Change from absolute to fixed */
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                z-index: -1; /* Ensure video stays behind other content */
+            }
+
+                .video-container video {
+                    min-width: 100%;
+                    min-height: 100%;
+                    width: auto;
+                    height: auto;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    object-fit: cover; /* Ensures video covers the entire container */
+                }
+
+            .login-box {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 500px;
+                padding: 40px;
+                transform: translate(-50%, -50%);
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <!--class="font-sans bg-gradient-to-r from-blue-500 to-purple-500 gradient-bg h-screen"-->
+        <!-- Hero Section -->
+
+        <div class="showcase">
+            <div class="video-container">
+                <video src="\Data\wave_-_19368 (1080p).mp4" autoplay muted loop id="myVideo"></video>
+            </div>
+
+            <div class="login-box">
+                <h2 style="align-content:center"></h2>
+                <form method="post">
+                    <div class="mb-3 row">
+                        <div class="col-2">
+                            <label asp-for="Credentials.UserName" style="color:aliceblue"></label>
+
+                        </div>
+                        <div class="col-5">
+                            <input type="text" asp-for="Credentials.UserName" class="form-control" />
+                            <span class="text-danger" asp-validation-for="Credentials.UserName"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <div class="col-2">
+                            <label asp-for="Credentials.Password" style="color:aliceblue"></label>
+                        </div>
+                        <div class="col-5">
+                            <input type="password" asp-for="Credentials.Password" class="form-control" />
+                            <span class="text-danger" asp-validation-for="Credentials.Password"></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+        <section class="flex items-center justify-center h-full px-4 bg-opacity-60">
+
+            <div class="text-center text-white max-w-2xl mx-auto">
+                <h1 class="text-4xl sm:text-5xl font-bold leading-tight mb-4">
+                    Whooz-Woo | Platform to be...
+                </h1>
+                <p class="text-lg sm:text-xl mb-8">
+                    Share your moments...Funz ryt here!
+                </p>
+
+                <!-- Call to Action Buttons -->
+                <div class="flex justify-center gap-4">
+                    <a href="/register" class="bg-gradient-to-r from-pink-500 to-yellow-500 text-white py-2 px-6 rounded-lg text-lg font-medium hover:opacity-90 transition duration-300">
+                        Get Started
+                    </a>
+                    <a href="../Pages/Login/LoginPage" class="bg-transparent border-2 border-white text-white py-2 px-3 rounded-sm text-md-center font-medium hover:bg-white hover:text-black transition duration-300">
+                        Login
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section (Example) -->
+        <section class="py-16 bg-white text-gray-900">
+            <div class="max-w-screen-xl mx-auto px-4 text-center">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-8">
+                    Why Choose Us?
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="p-6 bg-gray-100 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                        <h3 class="text-xl font-semibold mb-3">Seamless Media Sharing</h3>
+                        <p>Upload and share images, videos, and voice notes instantly. Connect and express yourself with ease!</p>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div class="p-6 bg-gray-100 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                        <h3 class="text-xl font-semibold mb-3">Social Integrations</h3>
+                        <p>Share your moments across platforms like Facebook, WhatsApp, and TikTok with a single click.</p>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div class="p-6 bg-gray-100 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                        <h3 class="text-xl font-semibold mb-3">Real-Time Messaging</h3>
+                        <p>Send text, voice, and media messages to your friends with secure and reliable chat features.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-8">
+            <div class="text-center">
+                <p>&copy; 2025 Your Social Platform.| Whooz-Woo All rights reserved.</p>
+            </div>
+        </footer>
+
+    </body>
+
+    </html>
+}

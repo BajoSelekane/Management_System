@@ -18,6 +18,11 @@ namespace Server.Services.Implementations
             return await result.Content.ReadFromJsonAsync<GeneralResponse>()!;
         }
 
+        public Task<RefreshTokenResponse> RefreshTokenAsync(RefreshToken token)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<LoginResponse> SignInAsync(Login user)
         {
             var httpClient = getHttpClient.GetPublicHttpClient();
@@ -25,10 +30,10 @@ namespace Server.Services.Implementations
             if (!result.IsSuccessStatusCode) return new LoginResponse(false, "An Error occured");
             return await result.Content.ReadFromJsonAsync<LoginResponse>()!;
         }
-        public Task<RefreshTokenResponse> RefreshTokenAsync(RefreshToken token)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<RefreshTokenResponse> RefreshTokenAsync(RefreshToken token)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
 
     }

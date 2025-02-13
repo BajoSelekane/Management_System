@@ -22,21 +22,20 @@ namespace Server.Services.Helpers
             var getUserClaims = DecryptToken(deserializeToken.Token!);
             if (getUserClaims == null) return await Task.FromResult(new AuthenticationState(anomymous));
 
-            var claimsPrincipal = setClaimPrincipal(getUserClaims);
+            var claimsPrincipal = SetClaimPrincipal(getUserClaims);
             return await Task.FromResult(new AuthenticationState(claimsPrincipal));
         }
 
-        private static ClaimsPrincipal setClaimPrincipal(CustomUserClaims claims)
+        private static ClaimsPrincipal SetClaimPrincipal(CustomUserClaims claims)
         {
             if (claims.Email is null) return new ClaimsPrincipal();
             return new ClaimsPrincipal(new ClaimsIdentity(
-                new List<Claim>
-                {
+                [
                     new(ClaimTypes.NameIdentifier,claims.Id),
                     new(ClaimTypes.Name,claims.Name!),
                     new(ClaimTypes.Email,claims.Email!),
                     new(ClaimTypes.Role,claims.Role!),
-                }, "JwtAuth"));
+                ], "JwtAuth"));
 
         }
 
@@ -48,7 +47,7 @@ namespace Server.Services.Helpers
                 var serializeSession = Serializations.SerializeObj(userSession);
                 await localStorageService.SetToken(serializeSession);
                 var getUserClaims = DecryptToken(userSession.Token!);
-                claimsPrincipal = setClaimPrincipal(getUserClaims);
+                claimsPrincipal = SetClaimPrincipal(getUserClaims);
             }
             else
             {

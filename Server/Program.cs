@@ -4,6 +4,7 @@ using Server;
 using Server.Repositories.Contracts;
 using Server.Repositories.Implementations;
 using ServerLibrary.Helper;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +15,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-       // throw new InvalidOperationException("Sorry, your connection is invalid or not found"));
 
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<Account_Users_Context>();
+       // throw new InvalidOperationException("Sorry, your connection is invalid or not found");
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+  .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.Configure<JwtSection>(builder.Configuration.GetSection("JwtSection"));
 builder.Services.AddScoped<IUserAccount, UserAccountRepository>();
 var app = builder.Build();
@@ -27,6 +32,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.MapIdentityApi<IdentityUser>();
 
 app.UseHttpsRedirection();
 

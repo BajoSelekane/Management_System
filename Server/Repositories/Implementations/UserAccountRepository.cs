@@ -1,6 +1,8 @@
 ﻿using BaseLibrary.DTOs;
+using BaseLibrary.DTOs.BaseLibrary.DTOs;
 using BaseLibrary.Entities;
 using BaseLibrary.Responses;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -15,8 +17,20 @@ using System.Text;
 
 namespace Server.Repositories.Implementations
 {
-    public class UserAccountRepository(IOptions<JwtSection> config, AppDbContext appDbContext) : IUserAccount
+    public class UserAccountRepository : IUserAccount
     {
+       
+            private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IOptions<JwtSection> config;
+        private readonly AppDbContext appDbContext;
+
+        public UserAccountRepository(IOptions<JwtSection> config, AppDbContext appDbContext)
+        {
+            this.config = config;
+            this.appDbContext = appDbContext;
+        }
+
+        // ... existing constructor and other methods ...
         public async Task<GeneralResponse> CreateAsync(Register user)
         {
             if (user is null) return new GeneralResponse(false, "Entity is empty");
@@ -28,7 +42,7 @@ namespace Server.Repositories.Implementations
             //Save user
             var applicationUser = await AddToDatabase(new ApplicationUser()
             {
-                Fullname = user.FullName,
+                FullName = user.FullName,
                 Email = user.Email,
                 Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
                 //ConfirmPassword = user.ConfirmPassword
@@ -99,7 +113,7 @@ namespace Server.Repositories.Implementations
             var userClaims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Fullname!),
+                new Claim(ClaimTypes.Name, user.FullName!),
                 new Claim(ClaimTypes.Email, user.Email!),
                 new Claim(ClaimTypes.Role, role!)
             };
@@ -155,5 +169,75 @@ namespace Server.Repositories.Implementations
             return new LoginResponse(true, "Token successfully granted", jwtToken, refreshToken);
         }
 
+        public Task<GeneralResponse> ForgotPasswordAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GeneralResponse> ResetPasswordAsync(ResetPassword model)
+        {
+            throw new NotImplementedException();
+        }
+
+      
+
+            public async Task<List<UserDTO>> GetAllUsersAsync()
+            {
+                try
+                {
+                    var users = await _userManager.Users.ToListAsync();
+                    return users.Select(user => new UserDTO
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        FullName = user.FullName,
+                        
+                    }).ToList();
+                }
+                catch (Exception)
+                {
+                    // Log the exception
+                    return new List<UserDTO>();
+                }
+            }
+
+            public async Task<UserDTO> GetUserByIdAsync(string userId)
+            {
+                try
+                {
+                    var user = await _userManager.FindByIdAsync(userId);
+                    if (user == null)
+                        return null;
+
+                    return new UserDTO
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        FullName = user.FullName,
+                       
+                    };
+                }
+                catch (Exception)
+                {
+                    // Log the exception
+                    return null;
+                }
+            }
+
+        Task<List<UserDTO>> IUserAccount.GetAllUsersAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<UserDTO> IUserAccount.GetUserByIdAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
-}
+
+        //Task<GeneralResponse> IUserAccount.RefreshTokenAsync(RefreshToken token)
+        //{
+        //    throw new NotImplementedException();
+        //}
+    }
+

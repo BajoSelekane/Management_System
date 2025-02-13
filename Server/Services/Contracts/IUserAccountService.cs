@@ -9,6 +9,8 @@ namespace Server.Services.Contracts
         Task<GeneralResponse> CreateAsync(Register user);
         Task<LoginResponse> SignInAsync(Login user);
         Task<RefreshTokenResponse> RefreshTokenAsync(RefreshToken token);
-
+        //Task<GeneralResponse> ForgotPasswordAsync(string email);
+        //Task<GeneralResponse> ResetPasswordAsync(ResetPassword model);
+       
     }
 }

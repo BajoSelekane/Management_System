@@ -1,0 +1,41 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome To Whooz-hoo</h1>
+    
+</div>
+
+
+<!-- SignalR Client Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+<script>
+    // Connect to the SignalR hub
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/messageHub")
+        .build();
+
+    // Start the connection
+    connection.start().then(() => {
+        console.log("SignalR Connected.");
+    }).catch((err) => {
+        console.error("SignalR Connection Error: ", err);
+    });
+
+    // Handle message count updates
+    connection.on("UpdateMessageCount", (count) => {
+        const messageBadge = document.querySelector('.nav-link[href="#"] .badge'); // Select the message badge
+        if (messageBadge) {
+            messageBadge.textContent = count; // Update the badge count
+        }
+    });
+
+    // Handle new messages
+    connection.on("ReceiveMessage", (message) => {
+        console.log("New Message: ", message);
+        // You can also display a toast notification or update the UI here
+    });
+</script>

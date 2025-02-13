@@ -23,7 +23,7 @@ namespace ServerLibrary.Repositories.Implementations
             //Save user
             var applicationUser = await AddToDatabase(new ApplicationUser()
             {
-                Fullname = user.FullName,
+                FullName = user.FullName,
                 Email = user.Email,
                 Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
                // ConfirmPassword =user.ConfirmPassword

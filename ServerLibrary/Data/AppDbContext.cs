@@ -16,7 +16,7 @@ namespace ServerLibrary.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<GenerateDepartment> GenerateDepartments { get; set; }
         public DbSet<Town> Towns { get; set; }
-        public DbSet<Branch> Branchs { get; set; }
+        public DbSet<Branch> Branches { get; set; }
         public DbSet<SystemRoles> SystemRoles { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
     }
